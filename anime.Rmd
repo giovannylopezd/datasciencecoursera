@@ -1,0 +1,44 @@
+---
+title: "anime"
+author: "Giovanny Lopez"
+date: "17/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+theme_set(theme_light())
+```
+
+```{r}
+rating <- read.csv("datasets/rating.csv")
+anime <- read.csv("datasets/anime.csv")
+```
+
+```{r}
+## top 10 rated TV anime in this dataset
+head(anime %>% filter(type=="TV",members>100000) %>% count(rating,name,genre,members) %>% arrange(desc(rating)),10)
+```
+
+```{r}
+## how many genres are there
+head(anime %>% filter(type=="TV") %>% count(genre) %>% arrange(desc(n)),20)
+```
+
+```{r}
+## plot by type
+library(ggplot2)
+
+anime %>%
+    filter(rating>7,!is.na(rating)) %>%
+    ggplot(aes(type,members/1000000,fill=type))+
+    geom_col()+
+    coord_flip()+
+    labs(y= "Miembros (MM)", x = "Tipo de Anime",title = "Plot por Miembros y Tipo de Anime")
+```
+
+
